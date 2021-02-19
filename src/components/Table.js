@@ -120,7 +120,7 @@ export default function EnhancedTable(props) {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClick = (event, name, selectedRow) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -137,8 +137,10 @@ export default function EnhancedTable(props) {
       );
     }
 
-    //setSelected(newSelected);
-    setOpen(true);
+    setSelected(newSelected);
+    if(props.handleCustomSelection){
+      props.handleCustomSelection(selectedRow);
+    }
 
   };
 
@@ -165,6 +167,15 @@ export default function EnhancedTable(props) {
     setTotalRows([...totalRows]);
     console.log(totalRows);
   };
+
+  const openEventsModal=(row)=>{
+    props.openModal(row);
+    setOpen(true);
+  }
+  const handleCloseModal=()=>{
+    props.closeModal();
+    setOpen(false);
+  }
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -202,7 +213,7 @@ export default function EnhancedTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row._id)}
+                      onClick={(event) => handleClick(event, row._id, row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -210,7 +221,6 @@ export default function EnhancedTable(props) {
                       selected={isItemSelected}
                     >
                       {row && Object.entries(props.headCells).map(([key, col])=>{
-                        console.log("key is::"+key);
                        if(col["field"].length){
                           return(
                            
@@ -226,11 +236,20 @@ export default function EnhancedTable(props) {
                              <TableCell align="right"
                              padding={col["disablePadding"] ? 'none' : 'default'}>
                              
-                             {(row.events.length && row.events.length >0)?
-                              (<DatePicker date={row.events[0].scheduleDate} />):
-                              <a href="javascript:void(0);">Add event</a>
+                             {(row.events.length > 0)?
+                              (<DatePicker date={row.events[0].scheduleDate} />)
+                              :
+                              (<a href="javascript:void(0);" onClick={(e)=>{openEventsModal(row)}}>Add event</a>)
                               }
                              </TableCell>
+                          );
+                        }
+                        if(col["type"]=="eventCount"){
+                          return(
+                            <TableCell align="right"
+                            padding={col["disablePadding"] ? 'none' : 'default'}>
+                            {row.events.length}
+                            </TableCell>
                           );
                         }
                       })}
@@ -262,6 +281,7 @@ export default function EnhancedTable(props) {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+        }
       </Paper>
     </div>
   );

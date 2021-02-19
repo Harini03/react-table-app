@@ -5,8 +5,12 @@ import { bindActionCreators } from 'redux';
 import * as actions from './actions';
 import EnhancedTable from '../../components/Table';
 import ErrorBoundary from '../../components/ErrorBoundary';
+import SimpleModal from '../../components/Modal';
+import Events from '../Events';
 
 export function Members(props){
+  const [open, setOpen]=React.useState(false);
+  const [selectedMemberRow, setSelectedMemberRow]=React.useState([]);
     const columns = [
         
         { field: 'name', sortable:true, headerName: 'Name', width: 130, numeric: false, disablePadding: false },
@@ -31,14 +35,27 @@ export function Members(props){
         },
         { field: 'company', headerName: 'Company', width: 130, numeric: false, disablePadding: true },
         { field: '', headerName: 'Event', sortable: false, type:"event", numeric: true, width: 190, disablePadding: true },
-        
+        {field:'', headerName: 'No of Events', sortable: false, type:"eventCount", numeric: true, disablePadding: false}
 
       ];
+
+      
     useEffect(()=>{
         props.actions.fetchMembers();
         //props.actions.fetchEvents();
 
-    },[])
+    },[]);
+    const openEventsModal=(memberRow)=>{
+      setOpen(true);
+      setSelectedMemberRow(memberRow);
+    };
+    const closeEventsModal=()=>{
+      setOpen(false);
+    };
+    const addEventToMember=(e)=>{
+      props.actions.updateMember(e, selectedMemberRow);
+      setOpen(false);
+    }
     return (
       
         <div>
@@ -47,7 +64,16 @@ export function Members(props){
               <EnhancedTable 
               rows={props.membersList.members}
               headCells={columns}
-              isDeletable={true} /> 
+              isDeletable={true}
+              openModal={openEventsModal}
+              closeModal={closeEventsModal}
+              rowUpdated={props.membersList.memberUpdated}
+              /> 
+              </ErrorBoundary>
+              <ErrorBoundary>
+              <SimpleModal openModal={open} closeModal={closeEventsModal} data={props.eventsList.events}>
+                <Events updateMember={addEventToMember} />
+              </SimpleModal>
             </ErrorBoundary>
         </div>
     );
@@ -55,11 +81,13 @@ export function Members(props){
     
 Members.propTypes = {
     actions: PropTypes.object,
-    membersList: PropTypes.object
+    membersList: PropTypes.object,
+    eventsList: PropTypes.object
   };
   
   const mapStateToProps = (state) => ({
-    membersList: state.members
+    membersList: state.members,
+    eventsList: state.events
   });
   
   const mapDispatchToProps = (dispatch) => ({

@@ -14,7 +14,7 @@ export const fetchEventsError = (err) => ({
   payload: err
 });
 
-export const fetchEventsAPI = () => axios.get(`http://www.json-generator.com/api/json/get/ckHGShKoOa?indent=2`);
+export const fetchEventsAPI = () => axios.get(`http://www.json-generator.com/api/json/get/cjsCfHNcSW?indent=2`);
 
 export const fetchEvents = () => (dispatch) => {
   dispatch(fetchEventsBegin());
@@ -33,4 +33,3 @@ export const fetchEvents = () => (dispatch) => {
     .then(onSuccess)
     .catch(onError);
 };
-

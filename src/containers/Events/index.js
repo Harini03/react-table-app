@@ -42,6 +42,13 @@ export function Events(props){
         
 
       ];
+
+      const attachEvent = (e) =>{
+        console.log(e);
+        if(props.updateMember){
+          props.updateMember(e);
+        }
+      }
     useEffect(()=>{
         //props.actions.fetchMembers();
         props.actions.fetchEvents();
@@ -54,7 +61,8 @@ export function Events(props){
               <EnhancedTable 
               rows={props.eventsList.events}
               headCells={columns}
-              isDeletable={false} /> 
+              isDeletable={false}
+              handleCustomSelection={attachEvent} /> 
             </ErrorBoundary>
         </div>
     );

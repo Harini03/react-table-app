@@ -62,3 +62,8 @@ export const fetchMembers = () => (dispatch) => {
     .catch(onError);
 };
 
+export const updateMember = (event, member) => ({
+  type: "UPDATE_MEMBER",
+  payload: event,
+  member: member
+});
