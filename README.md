@@ -3,7 +3,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Supported Browsers
-Edge, Chrome, FireFox, Safari
+Edge, Chrome, FireFox
 
 ## Available Scripts
 
