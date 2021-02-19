@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from './actions';
 import EnhancedTable from '../../components/Table';
+//import { DataGrid } from '@material-ui/data-grid';
 
 export function Events(props){
     const headCells = [
@@ -13,6 +14,33 @@ export function Events(props){
         { id: 'ScheduleDate', numeric: true, disablePadding: false, label: 'Schedule date' },
         { id: 'Duration', numeric: true, disablePadding: false, label: 'Duration' },
         { id: 'Capacity', numeric: true, disablePadding: false, label: 'Capacity' }
+      ];
+      const columns = [
+        
+        { field: 'organizer', headerName: 'Organizer', width: 130, numeric: false, disablePadding: true },
+        { field: 'company', headerName: 'Company', width: 130, numeric: false, disablePadding: true },
+        {
+          field: 'about',
+          headerName: 'About',
+          sortable: false,
+          //type: 'number',
+          width: 130,
+          numeric: false, disablePadding: true
+        },
+        {
+          field: 'scheduleDate',
+          headerName: 'Schedule Date',
+          description: 'This column has a value getter and is not sortable.',
+          sortable: false,
+          width: 90,
+          numeric: false, disablePadding: true
+          // valueGetter: (params) =>
+          //   `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
+        },
+        { field: 'duration', headerName: 'Duration', sortable: false, width: 90, numeric: false, disablePadding: true },
+        { field: 'capacity', headerName: 'Capacity', type: 'number', width: 130, numeric: true, disablePadding: false }
+        
+
       ];
     useEffect(()=>{
         //props.actions.fetchMembers();
@@ -24,8 +52,9 @@ export function Events(props){
             <h2>Events List</h2>
             <EnhancedTable 
             rows={props.eventsList.events}
-            headCells={headCells}
-            isDeletable={false} />
+            headCells={columns}
+            isDeletable={false} /> 
+            {/* <DataGrid rows={props.eventsList.events} columns={columns} pageSize={5} /> */}
         </div>
     );
 }

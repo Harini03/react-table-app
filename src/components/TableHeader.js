@@ -16,25 +16,39 @@ export default function EnhancedTableHead(props) {
           
           {headCells.map((headCell) => (
             <TableCell
-              key={headCell.id}
+              key={headCell.field}
               align={headCell.numeric ? 'right' : 'left'}
               padding={headCell.disablePadding ? 'none' : 'default'}
-              sortDirection={orderBy === headCell.id ? order : false}
+              sortDirection={(orderBy === headCell.id && headCell.sortable) ? order : false}
             >
+            {headCell.sortable &&
               <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
+                active={orderBy === headCell.field}
+                direction={orderBy === headCell.field ? order : 'asc'}
+                onClick={createSortHandler(headCell.field)}
               >
-                {headCell.label}
-                {orderBy === headCell.id ? (
+                <h3>{headCell.headerName}</h3>
+                {orderBy === headCell.field ? (
                   <span className={classes.visuallyHidden}>
                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                   </span>
                 ) : null}
               </TableSortLabel>
+            }
+            {!headCell.sortable &&
+            <h3>{headCell.headerName}</h3>
+            }
             </TableCell>
           ))}
+          {props.isDeletable && 
+            <TableCell
+            key="del"
+            align={'right'}
+            padding={'default'}
+            sortDirection={false}>
+            <h3>Delete</h3>
+            </TableCell>
+          }
         </TableRow>
       </TableHead>
     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -101,8 +101,12 @@ export default function EnhancedTable(props) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [open, setOpen] = React.useState(false);
-  //const [totalRows, setTotalRows] = React.useState([...props.rows]);
-  const totalRows = props.rows;
+  const [totalRows, setTotalRows] = React.useState([...props.rows]);
+  //const rows = [...props.rows];
+  useEffect(()=>{
+    setTotalRows([...props.rows]);
+  },[props.rows]);
+  
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -161,7 +165,7 @@ export default function EnhancedTable(props) {
     //let resultedRows = totalRows;
     let deleteIndex= totalRows.findIndex(row => row==selectedRow);
     let resultedRows = totalRows.splice(deleteIndex, 1);
-    //setTotalRows([...totalRows]);
+    setTotalRows([...totalRows]);
     console.log(totalRows);
   };
 
@@ -189,6 +193,7 @@ export default function EnhancedTable(props) {
               onRequestSort={handleRequestSort}
               rowCount={totalRows.length}
               headCells={props.headCells}
+              isDeletable={props.isDeletable}
             />
             <TableBody>
               {stableSort(totalRows, getComparator(order, orderBy))
@@ -207,13 +212,27 @@ export default function EnhancedTable(props) {
                       key={row._id}
                       selected={isItemSelected}
                     >
-                      {row && Object.entries(row).map(([key, col])=>{
+                      {row && Object.entries(props.headCells).map(([key, col])=>{
                         console.log("key is::"+key);
-                        if(key != "_id" || key != "index"){
-                        return(<div>
-                        <TableCell align="right">{col}</TableCell>
-                      </div>);
-                      <TableCell align="right">edit event</TableCell>
+                       if(col["field"].length){
+                          return(
+                           
+                            <TableCell 
+                            align={col["numeric"]?"right":"left"}
+                            padding={col["disablePadding"] ? 'none' : 'default'}>
+                              {row[col["field"]]}
+                            </TableCell>
+                          );
+                        }
+                        if(col["type"]=="event"){
+                          return(
+                             <TableCell align="right"
+                             padding={col["disablePadding"] ? 'none' : 'default'}>
+                             <a href="javascript:void(0);">Add event</a>
+                             </TableCell>
+                          );
+                        }
+                      })}
                       {props.isDeletable && <TableCell align="right">
                       <Tooltip title="Delete">
                         <IconButton aria-label="delete" onClick={(e)=>{deleteRow(index, row)}}>
@@ -221,9 +240,7 @@ export default function EnhancedTable(props) {
                         </IconButton>
                         </Tooltip>
                       </TableCell>}
-                        }
-                      })}
-                      
+                                            
                     </TableRow>
                   );
                 })}

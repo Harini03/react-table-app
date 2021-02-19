@@ -6,7 +6,7 @@ import Members from './containers/Members';
 function App() {
   return (
     <div>
-      
+      <Members />
       <Events />
       </div>
   );
