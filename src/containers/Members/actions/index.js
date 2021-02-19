@@ -41,8 +41,8 @@ export const fetchMembersError = (err) => ({
   type: "FETCH_MEMBERS_ERROR",
   payload: err
 });
-
-export const fetchMembersAPI = () => axios.get(`http://www.json-generator.com/api/json/get/cdKEejmJFe?indent=2`);
+//http://www.json-generator.com/api/json/get/clkHrWHfWW?indent=2
+export const fetchMembersAPI = () => axios.get(`http://www.json-generator.com/api/json/get/ckvVTtJbGW?indent=2`);
 
 export const fetchMembers = () => (dispatch) => {
   dispatch(fetchMembersBegin());

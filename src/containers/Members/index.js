@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from './actions';
 import EnhancedTable from '../../components/Table';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 export function Members(props){
     const columns = [
         
-        { field: 'name', sortable:true, headerName: 'Name', width: 130, numeric: false, disablePadding: true },
+        { field: 'name', sortable:true, headerName: 'Name', width: 130, numeric: false, disablePadding: false },
         { field: 'age', sortable: true, headerName: 'Age', width: 130, numeric: true, disablePadding: false },
         {
           field: 'email',
@@ -16,7 +17,7 @@ export function Members(props){
           sortable: true,
           //type: 'number',
           width: 130,
-          numeric: false, disablePadding: true
+          numeric: false, disablePadding: false
         },
         {
           field: 'phone',
@@ -24,7 +25,7 @@ export function Members(props){
           description: 'This column has a value getter and is not sortable.',
           //sortable: false,
           width: 130,
-          numeric: true, disablePadding: false
+          numeric: false, disablePadding: false
           // valueGetter: (params) =>
           //   `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
         },
@@ -39,13 +40,15 @@ export function Members(props){
 
     },[])
     return (
+      
         <div>
             <h2>Members List</h2>
-            <EnhancedTable 
-            rows={props.membersList.members}
-            headCells={columns}
-            isDeletable={true} /> 
-            {/* <DataGrid rows={props.eventsList.events} columns={columns} pageSize={5} /> */}
+            <ErrorBoundary>
+              <EnhancedTable 
+              rows={props.membersList.members}
+              headCells={columns}
+              isDeletable={true} /> 
+            </ErrorBoundary>
         </div>
     );
 }

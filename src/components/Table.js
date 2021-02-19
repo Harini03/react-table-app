@@ -9,16 +9,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EnhancedTableToolbar from './ToolbarHeader';
 import EnhancedTableHead from './TableHeader';
+import DatePicker from './DatePicker';
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -228,7 +225,11 @@ export default function EnhancedTable(props) {
                           return(
                              <TableCell align="right"
                              padding={col["disablePadding"] ? 'none' : 'default'}>
-                             <a href="javascript:void(0);">Add event</a>
+                             
+                             {(row.events.length && row.events.length >0)?
+                              (<DatePicker date={row.events[0].scheduleDate} />):
+                              <a href="javascript:void(0);">Add event</a>
+                              }
                              </TableCell>
                           );
                         }

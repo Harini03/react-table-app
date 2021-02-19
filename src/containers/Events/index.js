@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from './actions';
 import EnhancedTable from '../../components/Table';
-//import { DataGrid } from '@material-ui/data-grid';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 export function Events(props){
     const headCells = [
@@ -50,11 +50,12 @@ export function Events(props){
     return (
         <div>
             <h2>Events List</h2>
-            <EnhancedTable 
-            rows={props.eventsList.events}
-            headCells={columns}
-            isDeletable={false} /> 
-            {/* <DataGrid rows={props.eventsList.events} columns={columns} pageSize={5} /> */}
+            <ErrorBoundary>
+              <EnhancedTable 
+              rows={props.eventsList.events}
+              headCells={columns}
+              isDeletable={false} /> 
+            </ErrorBoundary>
         </div>
     );
 }
